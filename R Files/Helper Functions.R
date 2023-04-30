@@ -195,9 +195,9 @@ raster_create <- function(prediction_df, prediction_column, year_start)
   for (i in 1:length(unique(prediction_df$year)))
   {
     print(i)
-    stack_df_new <- stack_df[which(stack_df$year==(i+year_start-1)),]
     prediction_df_new <- prediction_df[which(prediction_df$year==(i+year_start-1)),]
-    year_raster <- rasterFromXYZ(cbind(stack_df_new$UTMX, stack_df_new$UTMY, prediction_df_new[,prediction_column]))
+    prediction_df_new <- prediction_df[which(prediction_df$year==(i+year_start-1)),]
+    year_raster <- rasterFromXYZ(cbind(prediction_df_new$UTMX, prediction_df_new$UTMY, prediction_df_new[,prediction_column]))
     year_stack <- stack(year_stack, year_raster)
   }
   return(year_stack)
@@ -207,12 +207,12 @@ raster_create <- function(prediction_df, prediction_column, year_start)
 raster_create_gam <- function(prediction_df, year_start)
 {
   year_stack <- stack()
-  for (i in 1:length(unique(stack_df$year)))
+  for (i in 1:length(unique(prediction_df$year)))
   {
     print(i)
-    stack_df_new <- stack_df[which(stack_df$year==(i+year_start-1)),]
-    prediction_df_new <- prediction_df$fit[which(stack_df$year==(i+year_start-1))]
-    year_raster <- rasterFromXYZ(cbind(stack_df_new$UTMX, stack_df_new$UTMY, prediction_df_new))
+    prediction_df_new <- prediction_df[which(prediction_df$year==(i+year_start-1)),]
+    prediction_df_new <- prediction_df$fit[which(prediction_df$year==(i+year_start-1))]
+    year_raster <- rasterFromXYZ(cbind(prediction_df_new$UTMX, prediction_df_new$UTMY, prediction_df_new))
     year_stack <- stack(year_stack, year_raster)
   }
   return(year_stack)
